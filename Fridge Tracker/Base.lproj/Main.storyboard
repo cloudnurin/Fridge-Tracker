@@ -72,7 +72,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" ambiguous="YES" axis="vertical" alignment="top" spacing="7" translatesAutoresizingMaskIntoConstraints="NO" id="DTr-db-4Hx">
-                                <rect key="frame" x="0.0" y="92" width="375" height="483"/>
+                                <rect key="frame" x="0.0" y="92" width="403.5" height="520"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="top" spacing="7" translatesAutoresizingMaskIntoConstraints="NO" id="rAF-Y1-mHR">
                                         <rect key="frame" x="0.0" y="0.0" width="151" height="87"/>
@@ -97,8 +97,14 @@
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <textInputTraits key="textInputTraits"/>
                                     </textField>
+                                    <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="消費期限を入力してください" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="xGB-kk-01F">
+                                        <rect key="frame" x="0.0" y="131" width="207" height="30"/>
+                                        <nil key="textColor"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <textInputTraits key="textInputTraits"/>
+                                    </textField>
                                     <imageView clipsSubviews="YES" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="defaultPhoto" translatesAutoresizingMaskIntoConstraints="NO" id="HkH-ew-ySX">
-                                        <rect key="frame" x="0.0" y="131" width="352" height="352"/>
+                                        <rect key="frame" x="0.0" y="168" width="352" height="352"/>
                                         <gestureRecognizers/>
                                         <constraints>
                                             <constraint firstAttribute="width" secondItem="HkH-ew-ySX" secondAttribute="height" multiplier="1:1" id="cbe-kF-qdK"/>
@@ -130,6 +136,7 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
+                        <outlet property="dateTextField" destination="xGB-kk-01F" id="z3m-fu-XJJ"/>
                         <outlet property="nameTextField" destination="iXC-3C-ppQ" id="PJI-F7-gcy"/>
                         <outlet property="photoImageView" destination="HkH-ew-ySX" id="6Qc-56-Qf4"/>
                         <outlet property="saveButton" destination="PpE-yt-oyV" id="G78-Go-1eo"/>

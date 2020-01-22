@@ -14,7 +14,9 @@ class FoodViewController: UIViewController, UITextFieldDelegate,UIImagePickerCon
     //MARK: Properties
     @IBOutlet weak var nameTextField: UITextField!
     @IBOutlet weak var photoImageView: UIImageView!
- 
+    @IBOutlet weak var dateTextField: UITextField!
+    
+    private var datePicker: UIDatePicker?
     var food: Food?
     
     @IBOutlet weak var saveButton: UIBarButtonItem!
@@ -24,6 +26,16 @@ class FoodViewController: UIViewController, UITextFieldDelegate,UIImagePickerCon
         // Handle the text field’s user input through delegate callbacks.
         nameTextField.delegate = self
         
+        datePicker = UIDatePicker()
+        datePicker?.datePickerMode = .date
+        datePicker?.addTarget(self, action: #selector(FoodViewController.dateChanged(datePicker:)), for: .valueChanged)
+        
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(FoodViewController.viewTapped(gestureRecognizer:)))
+        
+        view.addGestureRecognizer(tapGesture)
+        
+
+        dateTextField.inputView = datePicker
         // Set up views if editing an existing Meal.
         if let food = food {
             navigationItem.title = food.name
@@ -62,6 +74,18 @@ class FoodViewController: UIViewController, UITextFieldDelegate,UIImagePickerCon
         
         // Dismiss the picker.
         dismiss(animated: true, completion: nil)
+    }
+    
+    @objc func dateChanged(datePicker: UIDatePicker){
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "MM/dd/yyyy"
+        dateTextField.text = dateFormatter.string(from: datePicker.date)
+        //view.endEditing(true)
+    }
+    
+    @objc func viewTapped(gestureRecognizer: UITapGestureRecognizer){
+        view.endEditing(true)
+    //dismiss(animated: true, completion: nil)
     }
     //MARK: Navigation
     @IBAction func cancel(_ sender: UIBarButtonItem) {
