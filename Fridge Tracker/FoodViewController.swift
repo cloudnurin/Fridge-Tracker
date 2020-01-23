@@ -28,14 +28,16 @@ class FoodViewController: UIViewController, UITextFieldDelegate,UIImagePickerCon
         
         datePicker = UIDatePicker()
         datePicker?.datePickerMode = .date
+        datePicker?.locale = Locale.current
         datePicker?.addTarget(self, action: #selector(FoodViewController.dateChanged(datePicker:)), for: .valueChanged)
         
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(FoodViewController.viewTapped(gestureRecognizer:)))
         
         view.addGestureRecognizer(tapGesture)
         
-
+//date input into text field
         dateTextField.inputView = datePicker
+        
         // Set up views if editing an existing Meal.
         if let food = food {
             navigationItem.title = food.name
@@ -47,6 +49,7 @@ class FoodViewController: UIViewController, UITextFieldDelegate,UIImagePickerCon
         // Enable the Save button only if the text field has a valid Meal name.
         updateSaveButtonState()
     }
+    
     //MARK: UITextFieldDelegate
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         // Hide the keyboard.
@@ -56,7 +59,9 @@ class FoodViewController: UIViewController, UITextFieldDelegate,UIImagePickerCon
     func textFieldDidEndEditing(_ textField: UITextField) {
         updateSaveButtonState()
         navigationItem.title = textField.text
+
     }
+    
     //MARK: UIImagePickerControllerDelegate
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
         // Dismiss the picker if the user canceled.
@@ -85,7 +90,16 @@ class FoodViewController: UIViewController, UITextFieldDelegate,UIImagePickerCon
     
     @objc func viewTapped(gestureRecognizer: UITapGestureRecognizer){
         view.endEditing(true)
-    //dismiss(animated: true, completion: nil)
+        // 日付のフォーマット
+        let formatter = DateFormatter()
+        
+        //"yyyy年MM月dd日"を"yyyy/MM/dd"したりして出力の仕方を好きに変更できるよ
+        formatter.dateFormat = "yyyy年MM月dd日"
+        
+        //(from: datePicker.date))を指定してあげることで
+        //datePickerで指定した日付が表示される
+        dateTextField.text = "\(formatter.string(from: datePicker!.date))"
+
     }
     //MARK: Navigation
     @IBAction func cancel(_ sender: UIBarButtonItem) {
@@ -113,10 +127,11 @@ class FoodViewController: UIViewController, UITextFieldDelegate,UIImagePickerCon
         }
         let name = nameTextField.text ?? ""
         let photo = photoImageView.image
+        let expirydate = dateTextField.text ?? ""
+      
        
-     
         // Set the meal to be passed to MealTableViewController after the unwind segue.
-        food = Food(name: name, photo: photo)
+        food = Food(name: name, photo: photo, expirydate: expirydate)
     }
     
 //MARK: Actions

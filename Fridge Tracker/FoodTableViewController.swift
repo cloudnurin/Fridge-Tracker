@@ -48,6 +48,7 @@ class FoodTableViewController: UITableViewController {
         
         cell.nameLabel.text = food.name
         cell.photoImageView.image = food.photo
+        cell.dateLabel.text = food.expirydate
 
         return cell
     }
@@ -150,15 +151,15 @@ class FoodTableViewController: UITableViewController {
         let photo2 = UIImage(named: "food2")
         let photo3 = UIImage(named: "food3")
         
-        guard let food1 = Food(name: "Caprese Salad", photo: photo1) else {
+        guard let food1 = Food(name: "Caprese Salad", photo: photo1, expirydate: "yyyy年MM月dd日" ) else {
             fatalError("Unable to instantiate food1")
         }
         
-        guard let food2 = Food(name: "Chicken and Potatoes", photo: photo2) else {
+        guard let food2 = Food(name: "Chicken and Potatoes", photo: photo2, expirydate: "yyyy年MM月dd日") else {
             fatalError("Unable to instantiate food2")
         }
         
-        guard let food3 = Food(name: "Pasta with Meatballs", photo: photo3) else {
+        guard let food3 = Food(name: "Pasta with Meatballs", photo: photo3, expirydate: "yyyy年MM月dd日") else {
             fatalError("Unable to instantiate food3")
         }
         

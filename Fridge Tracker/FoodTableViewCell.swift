@@ -12,6 +12,7 @@ class FoodTableViewCell: UITableViewCell {
     //MARK: Properties
     @IBOutlet weak var nameLabel: UILabel!
     @IBOutlet weak var photoImageView: UIImageView!
+    @IBOutlet weak var dateLabel: UILabel!
     
     
     override func awakeFromNib() {

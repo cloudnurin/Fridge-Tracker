@@ -9,7 +9,7 @@
 import UIKit
 
 class Food {
-    init?(name: String, photo: UIImage?) {
+    init?(name: String, photo: UIImage?, expirydate: String) {
         
         // The name must not be empty
         guard !name.isEmpty else {
@@ -19,6 +19,7 @@ class Food {
         // Initialize stored properties.
         self.name = name
         self.photo = photo
+        self.expirydate = expirydate
         
     }
     
@@ -26,6 +27,7 @@ class Food {
     
     var name: String
     var photo: UIImage?
+    var expirydate: String
     
     
 }
