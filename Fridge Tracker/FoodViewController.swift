@@ -43,11 +43,12 @@ class FoodViewController: UIViewController, UITextFieldDelegate,UIImagePickerCon
             navigationItem.title = food.name
             nameTextField.text = food.name
             photoImageView.image = food.photo
-            
+            dateTextField.text = food.expirydate
         }
         
         // Enable the Save button only if the text field has a valid Meal name.
         updateSaveButtonState()
+
     }
     
     //MARK: UITextFieldDelegate
@@ -84,6 +85,7 @@ class FoodViewController: UIViewController, UITextFieldDelegate,UIImagePickerCon
     @objc func dateChanged(datePicker: UIDatePicker){
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "MM/dd/yyyy"
+        dateFormatter.locale = Locale(identifier: "ja__jpn")
         dateTextField.text = dateFormatter.string(from: datePicker.date)
         //view.endEditing(true)
     }
@@ -99,6 +101,8 @@ class FoodViewController: UIViewController, UITextFieldDelegate,UIImagePickerCon
         //(from: datePicker.date))を指定してあげることで
         //datePickerで指定した日付が表示される
         dateTextField.text = "\(formatter.string(from: datePicker!.date))"
+        
+        
 
     }
     //MARK: Navigation
@@ -132,6 +136,7 @@ class FoodViewController: UIViewController, UITextFieldDelegate,UIImagePickerCon
        
         // Set the meal to be passed to MealTableViewController after the unwind segue.
         food = Food(name: name, photo: photo, expirydate: expirydate)
+
     }
     
 //MARK: Actions

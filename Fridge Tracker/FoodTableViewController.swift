@@ -10,7 +10,6 @@ import UIKit
 
 class FoodTableViewController: UITableViewController {
     //MARK: Properties
-    
     var foods = [Food]()
 
     override func viewDidLoad() {
@@ -20,7 +19,18 @@ class FoodTableViewController: UITableViewController {
         //navigationItem.leftBarButtonItem = editButtonItem
         
         // Load the sample data.
-        loadSampleFoods()
+     
+       // loadSampleFoods()
+        
+        // Load any saved meals, otherwise load sample data.
+        if let savedFoods = loadFoods() {
+            foods += savedFoods
+        }
+        else {
+            // Load the sample data.
+            loadSampleFoods()
+        }
+       
     }
 
    // MARK: - Table view data source
@@ -38,7 +48,6 @@ class FoodTableViewController: UITableViewController {
         
         // Table view cells are reused and should be dequeued using a cell identifier.
         let cellIdentifier = "FoodTableViewCell"
-        
         guard let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath)as? FoodTableViewCell  else {
             fatalError("The dequeued cell is not an instance of FoodTableViewCell.")
         }
@@ -54,13 +63,12 @@ class FoodTableViewController: UITableViewController {
     }
     
 
-    
+  
     // Override to support conditional editing of the table view.
     override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         // Return false if you do not want the specified item to be editable.
         return true
     }
- 
 
     
     // Override to support editing the table view.
@@ -68,27 +76,29 @@ class FoodTableViewController: UITableViewController {
         if editingStyle == .delete {
             // Delete the row from the data source
             foods.remove(at: indexPath.row)
+            saveFoods()
             tableView.deleteRows(at: [indexPath], with: .fade)
         } else if editingStyle == .insert {
             // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-        }    
+            
+        }
     }
     
+    
 
-    /*
-    // Override to support rearranging the table view.
-    override func tableView(_ tableView: UITableView, moveRowAt fromIndexPath: IndexPath, to: IndexPath) {
-
-    }
-    */
-
-    /*
-    // Override to support conditional rearranging of the table view.
-    override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
-        // Return false if you do not want the item to be re-orderable.
-        return true
-    }
-    */
+    
+//    // Override to support rearranging the table view.
+//    override func tableView(_ tableView: UITableView, moveRowAt fromIndexPath: IndexPath, to: IndexPath) {
+//    }
+//
+//
+//
+//    // Override to support conditional rearranging of the table view.
+//    override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
+//        // Return false if you do not want the item to be re-orderable.
+//        return true
+//    }
+    
 
     
     // MARK: - Navigation
@@ -128,7 +138,6 @@ class FoodTableViewController: UITableViewController {
     @IBAction func unwindToFoodList(sender: UIStoryboardSegue) {
         
         if let sourceViewController = sender.source as? FoodViewController, let food = sourceViewController.food {
-            
             if let selectedIndexPath = tableView.indexPathForSelectedRow {
                 // Update an existing meal.
                 foods[selectedIndexPath.row] = food
@@ -139,8 +148,15 @@ class FoodTableViewController: UITableViewController {
             let newIndexPath = IndexPath(row: foods.count, section: 0)
             
             foods.append(food)
+            //position after save button is clicked
             tableView.insertRows(at: [newIndexPath], with: .automatic)
         }
+            // Save the meals.
+            //let sortedArray = foods.sort{ $0.expirydate.compare($1.expirydate) == ComparisonResult.orderedAscending
+            let sortedArray = foods.sort { $0.expirydate < $1.expirydate }
+            saveFoods()
+            
+            //let sortedArray = foods.sort { $0.expirydate < $1.expirydate }
         }
     }
     
@@ -151,21 +167,40 @@ class FoodTableViewController: UITableViewController {
         let photo2 = UIImage(named: "food2")
         let photo3 = UIImage(named: "food3")
         
-        guard let food1 = Food(name: "Caprese Salad", photo: photo1, expirydate: "yyyy年MM月dd日" ) else {
+        guard let food1 = Food(name: "ヨーグルト", photo: photo1, expirydate: "2020年10月10日" ) else {
             fatalError("Unable to instantiate food1")
         }
         
-        guard let food2 = Food(name: "Chicken and Potatoes", photo: photo2, expirydate: "yyyy年MM月dd日") else {
+        guard let food2 = Food(name: "牛乳", photo: photo2, expirydate: "2019年10月03日") else {
             fatalError("Unable to instantiate food2")
         }
         
-        guard let food3 = Food(name: "Pasta with Meatballs", photo: photo3, expirydate: "yyyy年MM月dd日") else {
+        guard let food3 = Food(name: "パン", photo: photo3, expirydate: "2020年11月04日") else {
             fatalError("Unable to instantiate food3")
         }
         
+//        foods.sort {
+//            $0.expirydate < $1.expirydate
+//        }
         foods += [food1, food2, food3]
-
+        //expirydate; ＝; expirydate.sort { $0 < $1 }
+//        let sortedArray = foods.sort{ $0.expirydate.compare($1.expirydate) == ComparisonResult.orderedAscending }
+        let sortedArray = foods.sort { $0.expirydate > $1.expirydate }
+        }
+    
+    private func saveFoods() {
+        let isSuccessfulSave = NSKeyedArchiver.archiveRootObject(foods, toFile: Food.ArchiveURL.path)
+        if isSuccessfulSave {
+            os_log("Foods successfully saved.", log: OSLog.default, type: .debug)
+        } else {
+            os_log("Failed to save foods...", log: OSLog.default, type: .error)
+        }
     }
-
-
+    private func loadFoods() -> [Food]? {
+        return NSKeyedUnarchiver.unarchiveObject(withFile: Food.ArchiveURL.path) as? [Food]
+    }
 }
+
+
+
+
