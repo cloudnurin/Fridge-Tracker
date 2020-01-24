@@ -132,6 +132,7 @@ class FoodViewController: UIViewController, UITextFieldDelegate,UIImagePickerCon
         let name = nameTextField.text ?? ""
         let photo = photoImageView.image
         let expirydate = dateTextField.text ?? ""
+        
       
        
         // Set the meal to be passed to MealTableViewController after the unwind segue.

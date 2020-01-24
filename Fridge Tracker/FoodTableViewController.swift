@@ -19,12 +19,13 @@ class FoodTableViewController: UITableViewController {
         //navigationItem.leftBarButtonItem = editButtonItem
         
         // Load the sample data.
-     
+
        // loadSampleFoods()
         
         // Load any saved meals, otherwise load sample data.
         if let savedFoods = loadFoods() {
             foods += savedFoods
+            
         }
         else {
             // Load the sample data.
@@ -39,7 +40,6 @@ class FoodTableViewController: UITableViewController {
     }
 //
   override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-
         return foods.count
     }
 
@@ -51,15 +51,13 @@ class FoodTableViewController: UITableViewController {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath)as? FoodTableViewCell  else {
             fatalError("The dequeued cell is not an instance of FoodTableViewCell.")
         }
-        
         // Fetches the appropriate meal for the data source layout.
         let food = foods[indexPath.row]
-        
         cell.nameLabel.text = food.name
         cell.photoImageView.image = food.photo
         cell.dateLabel.text = food.expirydate
-
         return cell
+        
     }
     
 
@@ -87,17 +85,18 @@ class FoodTableViewController: UITableViewController {
     
 
     
-//    // Override to support rearranging the table view.
-//    override func tableView(_ tableView: UITableView, moveRowAt fromIndexPath: IndexPath, to: IndexPath) {
-//    }
+  // Override to support rearranging the table view.
+    //override func tableView(_ tableView: UITableView, moveRowAt fromIndexPath: IndexPath, to: IndexPath) {
+ //let sortedArray = foods.sort { $0.expirydate < $1.expirydate }
+ //   }
 //
 //
 //
 //    // Override to support conditional rearranging of the table view.
-//    override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
+   //override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
 //        // Return false if you do not want the item to be re-orderable.
-//        return true
-//    }
+     //  return true
+    //}
     
 
     
@@ -105,6 +104,7 @@ class FoodTableViewController: UITableViewController {
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+
         super.prepare(for: segue, sender: sender)
         
         switch(segue.identifier ?? "") {
@@ -124,7 +124,6 @@ class FoodTableViewController: UITableViewController {
             guard let indexPath = tableView.indexPath(for: selectedFoodCell) else {
                 fatalError("The selected cell is not being displayed by the table")
             }
-            
             let selectedFood = foods[indexPath.row]
             foodDetailViewController.food = selectedFood
             
@@ -135,8 +134,8 @@ class FoodTableViewController: UITableViewController {
     
     
     //MARK: Actions
+    
     @IBAction func unwindToFoodList(sender: UIStoryboardSegue) {
-        
         if let sourceViewController = sender.source as? FoodViewController, let food = sourceViewController.food {
             if let selectedIndexPath = tableView.indexPathForSelectedRow {
                 // Update an existing meal.
@@ -146,17 +145,14 @@ class FoodTableViewController: UITableViewController {
             else{
             // Add a new meal.
             let newIndexPath = IndexPath(row: foods.count, section: 0)
-            
             foods.append(food)
             //position after save button is clicked
             tableView.insertRows(at: [newIndexPath], with: .automatic)
         }
             // Save the meals.
-            //let sortedArray = foods.sort{ $0.expirydate.compare($1.expirydate) == ComparisonResult.orderedAscending
-            let sortedArray = foods.sort { $0.expirydate < $1.expirydate }
+           let sortedArray = foods.sort { $0.expirydate < $1.expirydate }
             saveFoods()
-            
-            //let sortedArray = foods.sort { $0.expirydate < $1.expirydate }
+           
         }
     }
     
@@ -189,6 +185,7 @@ class FoodTableViewController: UITableViewController {
         }
     
     private func saveFoods() {
+         //let sortedArray = foods.sort { $0.expirydate < $1.expirydate }
         let isSuccessfulSave = NSKeyedArchiver.archiveRootObject(foods, toFile: Food.ArchiveURL.path)
         if isSuccessfulSave {
             os_log("Foods successfully saved.", log: OSLog.default, type: .debug)
